@@ -1,0 +1,22 @@
+{
+  "name": "@lienguard/api",
+  "version": "0.1.0",
+  "description": "LienGuard Free REST API — Fastify server exposing the deadline calculator.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "start": "node dist/server.js",
+    "dev": "node --watch dist/server.js",
+    "test": "vitest run"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/cors": "^10.1.0",
+    "@fastify/rate-limit": "^10.3.0",
+    "@lienguard/core": "^0.1.0",
+    "fastify": "^5.10.0",
+    "zod": "^3.25.76"
+  }
+}

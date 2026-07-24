@@ -1,0 +1,19 @@
+{
+  "name": "@lienguard/cli",
+  "version": "0.1.0",
+  "description": "LienGuard command-line deadline calculator (Free tier).",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "lienguard": "./dist/bin.js"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@lienguard/core": "^0.1.0"
+  }
+}
