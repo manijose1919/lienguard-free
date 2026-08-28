@@ -154,4 +154,36 @@ describe("security controls", () => {
       await scoped.close();
     }
   });
+
+  it("ignores X-Forwarded-For unless trustProxy is enabled", async () => {
+    const app = await buildApp({ rateLimitMax: 2, rateLimitWindowMs: 60_000 });
+    await app.ready();
+    try {
+      const hit = (xff: string) =>
+        app.inject({ method: "GET", url: "/health", headers: { "x-forwarded-for": xff } });
+      expect((await hit("1.1.1.1")).statusCode).toBe(200);
+      expect((await hit("1.1.1.1")).statusCode).toBe(200);
+      expect((await hit("8.8.8.8")).statusCode).toBe(429);
+    } finally {
+      await app.close();
+    }
+  });
+
+  it("uses X-Forwarded-For when trustProxy is enabled", async () => {
+    const app = await buildApp({
+      rateLimitMax: 1,
+      rateLimitWindowMs: 60_000,
+      trustProxy: true,
+    });
+    await app.ready();
+    try {
+      const hit = (xff: string) =>
+        app.inject({ method: "GET", url: "/health", headers: { "x-forwarded-for": xff } });
+      expect((await hit("1.1.1.1")).statusCode).toBe(200);
+      expect((await hit("8.8.8.8")).statusCode).toBe(200);
+      expect((await hit("1.1.1.1")).statusCode).toBe(429);
+    } finally {
+      await app.close();
+    }
+  });
 });

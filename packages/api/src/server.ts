@@ -3,8 +3,9 @@
  *
  * Configuration comes from the environment so nothing host-specific is baked
  * into the image:
- *   PORT  — port to listen on (default 3000)
- *   HOST  — interface to bind   (default 0.0.0.0)
+ *   PORT         — port to listen on (default 3000)
+ *   HOST         — interface to bind   (default 0.0.0.0)
+ *   TRUST_PROXY  — honour X-Forwarded-* (default false)
  */
 import { buildApp } from "./app.js";
 
