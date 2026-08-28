@@ -48,6 +48,12 @@ export interface BuildOptions {
    * default, never a wildcard.
    */
   corsOrigins?: string[];
+  /**
+   * Trust `X-Forwarded-*` from a reverse proxy. Must stay off unless a
+   * trusted terminator overwrites those headers — otherwise clients can
+   * spoof their IP and bypass per-IP rate limits.
+   */
+  trustProxy?: boolean;
 }
 
 function resolveCorsOrigins(options: BuildOptions): string[] {
@@ -60,8 +66,17 @@ function resolveCorsOrigins(options: BuildOptions): string[] {
     .filter(Boolean);
 }
 
+function resolveTrustProxy(options: BuildOptions): boolean {
+  if (options.trustProxy !== undefined) return options.trustProxy;
+  const v = (process.env["TRUST_PROXY"] ?? "").trim().toLowerCase();
+  return v === "1" || v === "true" || v === "yes";
+}
+
 export async function buildApp(options: BuildOptions = {}): Promise<FastifyInstance> {
-  const app = Fastify({ logger: options.logger ?? false });
+  const app = Fastify({
+    logger: options.logger ?? false,
+    trustProxy: resolveTrustProxy(options),
+  });
 
   // --- Security & cross-origin controls -----------------------------------
   await app.register(cors, {

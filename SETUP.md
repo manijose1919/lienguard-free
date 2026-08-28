@@ -55,6 +55,7 @@ The server listens on `http://0.0.0.0:3000` by default.
 | `PORT` | `3000` | Port the API listens on. |
 | `HOST` | `0.0.0.0` | Interface to bind. |
 | `CORS_ORIGINS` | *(empty = deny)* | Comma-separated list of allowed browser origins. **No wildcard by default.** |
+| `TRUST_PROXY` | `false` | Honour `X-Forwarded-*` for client IP / rate limits. Enable **only** behind a reverse proxy that overwrites those headers. |
 
 Example:
 
